@@ -48,15 +48,16 @@ The companion plugin's APNs IPv4 and IPv6 networks are also mapped to
 
 Known mainland-China destinations use `DIRECT`; known overseas destinations
 use `PROXY`; China IPs use `DIRECT`; and truly unmatched ordinary traffic ends
-at `FINAL,DIRECT`. This direct-first final rule is unrelated to APNs: APNs is
-matched earlier and remains proxy-first through `APNS-FALLBACK`.
+at `FINAL,PROXY`. If that proxy path is unsuitable, `DIRECT` remains available
+as a manual choice inside the `PROXY` select group. APNs is matched earlier and
+remains independently proxy-first through `APNS-FALLBACK`.
 
 Loon cannot retry the current destination through another rule policy after a
-direct connection fails. A `fallback` policy checks candidates against one
-fixed health-check URL, so using it for unknown websites would not reliably
-detect whether each target is reachable. The configuration therefore uses the
-requested conservative direct-first behavior without pretending that automatic
-per-site retry exists.
+proxy connection fails. A `fallback` policy checks candidates against one fixed
+health-check URL, so using it for unknown websites would not reliably detect
+whether each target is reachable. The configuration therefore gives unmatched
+sites `PROXY` priority and retains `DIRECT` as a manual fallback without
+pretending that automatic per-site retry exists.
 
 ## Module compatibility
 
